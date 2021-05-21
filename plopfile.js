@@ -20,6 +20,29 @@ module.exports = (plop) => {
           templateFile: 'hbs/field.hbs',
           data,
         },
+        {
+          type: 'modify',
+          path: 'src/components/fields/index.js',
+          transform: (content, data) => {
+            let i = 0
+            let str = ''
+            str = content.replace(/(\n\n)/g, function (word) {
+              i++
+              if (i === 1) {
+                return `\nimport C${data.upperName} from './c-${data.name}'\n\n`
+              }
+              return word
+            })
+            const arr = str.split('\n')
+            arr.splice(
+              arr.length - 1,
+              0,
+              `Vue.component('C${data.upperName}', C${data.upperName})`
+            )
+            return arr.join('\n')
+          },
+          data,
+        },
       ]
     },
   })
