@@ -1,8 +1,13 @@
 <script>
 import './fields'
+import RenderFiled from './render-filed'
 
 export default {
   name: 'ConfigurableForm',
+
+  components: {
+    RenderFiled,
+  },
 
   props: {
     size: {
@@ -30,17 +35,9 @@ export default {
       <el-form labelWidth={this.labelWidth}>
         {this.fields.map((field) => {
           const { type } = field
-          let fieldEl = null
-          switch (type) {
-            case 'input':
-              fieldEl = <c-input></c-input>
-              break
-            case 'radio':
-              fieldEl = <c-radio></c-radio>
-              break
-            default:
-              return null
-          }
+          const fieldEl = (
+            <render-filed type={type} field={field}></render-filed>
+          )
           return (
             <el-form-item
               key={field.prop}

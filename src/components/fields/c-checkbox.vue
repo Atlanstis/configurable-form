@@ -2,9 +2,15 @@
 import FieldMixin from '@/mixins/field-mixin.js'
 
 export default {
-  name: 'CSelect',
+  name: 'CCheckbox',
 
   mixins: [FieldMixin],
+
+  data() {
+    return {
+      value: [],
+    }
+  },
 
   computed: {
     options() {
@@ -12,25 +18,17 @@ export default {
     },
   },
 
-  data() {
-    return {
-      value: '',
-    }
-  },
-
   render() {
     return (
-      <el-select v-model={this.value} placeholder="请选择">
+      <el-checkbox-group v-model={this.value}>
         {this.options.map((opt) => {
           return (
-            <el-option
-              key={opt.value}
-              label={opt.label}
-              value={opt.value}
-            ></el-option>
+            <el-checkbox key={opt.value} label={opt.value}>
+              {opt.label}
+            </el-checkbox>
           )
         })}
-      </el-select>
+      </el-checkbox-group>
     )
   },
 }

@@ -19,10 +19,8 @@ import {
   DatePicker,
   TimeSelect,
   TimePicker,
-  Tooltip,
   Form,
   FormItem,
-  Tag,
   Row,
   Col,
 } from 'element-ui'
@@ -46,9 +44,7 @@ Vue.use(ButtonGroup)
 Vue.use(DatePicker)
 Vue.use(TimeSelect)
 Vue.use(TimePicker)
-Vue.use(Tooltip)
 Vue.use(Form)
 Vue.use(FormItem)
-Vue.use(Tag)
 Vue.use(Row)
 Vue.use(Col)

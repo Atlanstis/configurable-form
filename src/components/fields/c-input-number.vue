@@ -2,18 +2,20 @@
 import FieldMixin from '@/mixins/field-mixin.js'
 
 export default {
-  name: 'CInput',
+  name: 'CInputNumber',
 
   mixins: [FieldMixin],
 
   data() {
     return {
-      value: '',
+      value: 0,
     }
   },
 
   render() {
-    return <el-input v-model={this.value} size={this.size}></el-input>
+    return (
+      <el-input-number v-model={this.value} size={this.size}></el-input-number>
+    )
   },
 }
 </script>

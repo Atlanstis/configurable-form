@@ -13,6 +13,9 @@ module.exports = (plop) => {
       data.upperName = data.name
         .toLowerCase()
         .replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+        .replace(/-(\w)/g, function (all, letter) {
+          return letter.toUpperCase()
+        })
       return [
         {
           type: 'add',

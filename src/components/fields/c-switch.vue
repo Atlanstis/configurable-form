@@ -2,7 +2,7 @@
 import FieldMixin from '@/mixins/field-mixin.js'
 
 export default {
-  name: 'CInput',
+  name: 'CSwitch',
 
   mixins: [FieldMixin],
 
@@ -13,7 +13,13 @@ export default {
   },
 
   render() {
-    return <el-input v-model={this.value} size={this.size}></el-input>
+    return (
+      <el-switch
+        v-model={this.value}
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+      ></el-switch>
+    )
   },
 }
 </script>

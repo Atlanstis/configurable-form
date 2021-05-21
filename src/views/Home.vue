@@ -31,7 +31,66 @@ export default {
               label: 'radio 1',
               value: '1',
             },
+            {
+              label: 'radio 2',
+              value: '2',
+            },
           ],
+        },
+        {
+          type: 'checkbox',
+          prop: 'checkbox',
+          label: 'checkbox',
+          options: [
+            {
+              label: 'checkbox 1',
+              value: '1',
+            },
+            {
+              label: 'checkbox 2',
+              value: '2',
+            },
+          ],
+        },
+        {
+          type: 'inputNumber',
+          prop: 'inputNumber',
+          label: 'inputNumber',
+        },
+        {
+          type: 'select',
+          prop: 'select',
+          label: 'select',
+          options: [
+            {
+              label: 'select 1',
+              value: '1',
+            },
+            {
+              label: 'select 2',
+              value: '2',
+            },
+          ],
+        },
+        {
+          type: 'switch',
+          prop: 'switch',
+          label: 'switch',
+        },
+        {
+          type: 'timePicker',
+          prop: 'timePicker',
+          label: 'timePicker',
+        },
+        {
+          type: 'datePicker',
+          prop: 'datePicker',
+          label: 'datePicker',
+        },
+        {
+          type: 'dateTimePicker',
+          prop: 'dateTimePicker',
+          label: 'dateTimePicker',
         },
       ],
     }
