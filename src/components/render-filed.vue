@@ -1,6 +1,7 @@
 <script>
-import { hasOwnProperty } from '@/utils'
-import { SUPPORT_EVENT } from '@/constants'
+import _ from 'lodash'
+import { hasOwnProperty, isArray } from '@/utils'
+import { SUPPORT_EVENT, SUPPORT_SIZE } from '@/constants'
 
 const TAG_MAPPING = {
   radio: 'c-radio',
@@ -27,40 +28,83 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    size: {
+      type: String,
+      default: '',
+    },
     value: {},
   },
 
-  render: function (createElement) {
-    if (hasOwnProperty(ELE_TAG_MAPPING, this.type)) {
-      const self = this
-      const onEvent = {
-        input: function (event) {
-          self.$emit('input', event)
-        },
-      }
-      if (hasOwnProperty(SUPPORT_EVENT, this.type)) {
-        SUPPORT_EVENT[this.type].forEach((eventName) => {
-          onEvent[eventName] = function (...value) {
-            self.$emit(eventName, ...value)
+  methods: {
+    // 处理监听事件
+    handleEvent() {
+      const onEvent = {}
+      const { type } = this
+      if (isArray(SUPPORT_EVENT[type])) {
+        SUPPORT_EVENT[type].forEach((eventName) => {
+          onEvent[eventName] = (...value) => {
+            this.$emit(eventName, ...value)
           }
         })
       }
-      return createElement(ELE_TAG_MAPPING[this.type], {
-        props: {
-          value: this.value,
+      return onEvent
+    },
+    // 处理 props
+    handleProps() {
+      const props = {
+        value: this.value,
+      }
+      if (hasOwnProperty(this.field, 'props')) {
+        const objProps = _.cloneDeep(this.field.props)
+        // 全局设置组件 size
+        if (SUPPORT_SIZE.includes(this.type)) {
+          props.size = this.size
+        }
+        // 防止与双向绑定的值冲突，双向绑定失效
+        if (hasOwnProperty(objProps, 'value')) {
+          delete objProps.value
+        }
+        Object.assign(props, objProps)
+      }
+      return props
+    },
+
+    // 处理插槽
+    handleSlots(h) {
+      let slots = []
+      const { slots: fieldSLots } = this.field
+      if (Array.isArray(fieldSLots)) {
+        slots = fieldSLots.map((slot) => {
+          return h('template', { slot: slot.slotName }, [slot.formatter()])
+        })
+      }
+      return slots
+    },
+  },
+
+  render: function (h) {
+    if (hasOwnProperty(ELE_TAG_MAPPING, this.type)) {
+      const onEvent = this.handleEvent()
+      const props = this.handleProps()
+      const slots = this.handleSlots(h)
+      return h(
+        ELE_TAG_MAPPING[this.type],
+        {
+          props,
+          on: onEvent,
         },
-        on: onEvent,
-      })
+        slots
+      )
     }
     const tag = TAG_MAPPING[this.type]
     if (tag) {
-      return createElement(tag, {
+      return h(tag, {
         props: {
           field: this.field,
         },
       })
     }
-    return createElement('div')
+    return h('div')
   },
 }
 </script>

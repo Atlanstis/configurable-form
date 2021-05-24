@@ -21,7 +21,17 @@ export default {
           type: 'input',
           prop: 'input',
           label: 'input',
-          default: '123',
+          props: {
+            clearable: true,
+          },
+          slots: [
+            {
+              slotName: 'append',
+              formatter: () => {
+                return <el-button icon="el-icon-search"></el-button>
+              },
+            },
+          ],
           on: {
             change: (value) => {
               console.log('change', value)

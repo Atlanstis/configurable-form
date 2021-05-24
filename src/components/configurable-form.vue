@@ -1,7 +1,13 @@
 <script>
 import './fields'
 import RenderFiled from './render-filed'
-import { isFunction, isNullOrUndefined, hasOwnProperty } from '@/utils'
+import {
+  isFunction,
+  isNullOrUndefined,
+  isObject,
+  isArray,
+  hasOwnProperty,
+} from '@/utils'
 import { SUPPORT_EVENT } from '@/constants'
 
 const FIELD_DEFAULT_VAL = {
@@ -87,10 +93,7 @@ export default {
           const { type, on } = field
           // 注册监听事件
           const onEvent = {}
-          if (
-            hasOwnProperty(field, 'on') &&
-            hasOwnProperty(SUPPORT_EVENT, type)
-          ) {
+          if (isObject(on) && isArray(SUPPORT_EVENT[type])) {
             for (let eventName in on) {
               if (SUPPORT_EVENT[type].includes(eventName)) {
                 onEvent[eventName] = (...value) => {
@@ -99,11 +102,15 @@ export default {
               }
             }
           }
+          const props = {
+            type,
+            field,
+            size: this.size,
+          }
           const fieldEl = (
             <render-filed
               v-model={this.formData[type]}
-              type={type}
-              field={field}
+              props={props}
               on={onEvent}
             ></render-filed>
           )

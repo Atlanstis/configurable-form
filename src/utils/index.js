@@ -6,6 +6,12 @@ const is = _.curry((type, val) => {
 
 export const isFunction = is('Function')
 
+export const isObject = is('Object')
+
+export const isArray = (val) => {
+  return Array.isArray(val)
+}
+
 export const isNullOrUndefined = (val) => {
   return val === null || val === undefined
 }
