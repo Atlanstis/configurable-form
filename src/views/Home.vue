@@ -21,6 +21,24 @@ export default {
           type: 'input',
           prop: 'input',
           label: 'input',
+          default: '123',
+          on: {
+            change: (value) => {
+              console.log('change', value)
+            },
+            blur: (value) => {
+              console.log('blur', value)
+            },
+            focus: (value) => {
+              console.log('focus', value)
+            },
+            input: (value) => {
+              console.log('input', value)
+            },
+            clear: (value) => {
+              console.log('clear', value)
+            },
+          },
         },
         {
           type: 'radio',
@@ -100,7 +118,7 @@ export default {
 
 <style lang="scss" scoped>
 .home {
-  width: 1000px;
+  width: 400px;
   margin: 100px auto;
 }
 </style>

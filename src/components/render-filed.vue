@@ -1,6 +1,8 @@
 <script>
+import { hasOwnProperty } from '@/utils'
+import { SUPPORT_EVENT } from '@/constants'
+
 const TAG_MAPPING = {
-  input: 'c-input',
   radio: 'c-radio',
   select: 'c-select',
   checkbox: 'c-checkbox',
@@ -9,6 +11,10 @@ const TAG_MAPPING = {
   timePicker: 'c-time-picker',
   datePicker: 'c-date-picker',
   dateTimePicker: 'c-date-time-picker',
+}
+
+const ELE_TAG_MAPPING = {
+  input: 'el-input',
 }
 
 export default {
@@ -21,9 +27,31 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    value: {},
   },
 
   render: function (createElement) {
+    if (hasOwnProperty(ELE_TAG_MAPPING, this.type)) {
+      const self = this
+      const onEvent = {
+        input: function (event) {
+          self.$emit('input', event)
+        },
+      }
+      if (hasOwnProperty(SUPPORT_EVENT, this.type)) {
+        SUPPORT_EVENT[this.type].forEach((eventName) => {
+          onEvent[eventName] = function (...value) {
+            self.$emit(eventName, ...value)
+          }
+        })
+      }
+      return createElement(ELE_TAG_MAPPING[this.type], {
+        props: {
+          value: this.value,
+        },
+        on: onEvent,
+      })
+    }
     const tag = TAG_MAPPING[this.type]
     if (tag) {
       return createElement(tag, {

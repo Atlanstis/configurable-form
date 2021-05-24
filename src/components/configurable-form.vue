@@ -1,6 +1,20 @@
 <script>
 import './fields'
 import RenderFiled from './render-filed'
+import { isFunction, isNullOrUndefined, hasOwnProperty } from '@/utils'
+import { SUPPORT_EVENT } from '@/constants'
+
+const FIELD_DEFAULT_VAL = {
+  input: '',
+  radio: '',
+  select: '',
+  checkbox: '',
+  inputNumber: '',
+  switch: '',
+  timePicker: '',
+  datePicker: '',
+  dateTimePicker: '',
+}
 
 export default {
   name: 'ConfigurableForm',
@@ -24,19 +38,74 @@ export default {
     },
   },
 
+  data() {
+    return {
+      formData: {},
+      defaultData: {},
+    }
+  },
+
   provide() {
     return {
       size: this.size,
     }
   },
 
+  created() {
+    this.dataInit()
+  },
+
+  methods: {
+    dataInit() {
+      if (!Array.isArray(this.fields)) return
+      let formData = {}
+      let defaultData = {}
+      this.fields.map((field) => {
+        let val
+        if (hasOwnProperty(field, 'default')) {
+          val = field.default
+        } else {
+          const defaultVal = FIELD_DEFAULT_VAL[field.type]
+          val = isNullOrUndefined(defaultVal)
+            ? undefined
+            : isFunction(defaultVal)
+            ? defaultVal()
+            : defaultVal
+        }
+        formData[field.prop] = val
+        defaultData[field.prop] = val
+      })
+      this.formData = formData
+      this.defaultData = defaultData
+    },
+  },
+
   render() {
     return (
       <el-form labelWidth={this.labelWidth}>
         {this.fields.map((field) => {
-          const { type } = field
+          const { type, on } = field
+          // 注册监听事件
+          const onEvent = {}
+          if (
+            hasOwnProperty(field, 'on') &&
+            hasOwnProperty(SUPPORT_EVENT, type)
+          ) {
+            for (let eventName in on) {
+              if (SUPPORT_EVENT[type].includes(eventName)) {
+                onEvent[eventName] = (...value) => {
+                  on[eventName](...value)
+                }
+              }
+            }
+          }
           const fieldEl = (
-            <render-filed type={type} field={field}></render-filed>
+            <render-filed
+              v-model={this.formData[type]}
+              type={type}
+              field={field}
+              on={onEvent}
+            ></render-filed>
           )
           return (
             <el-form-item
