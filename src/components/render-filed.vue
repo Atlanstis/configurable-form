@@ -18,6 +18,11 @@ const ELE_TAG_MAPPING = {
   input: 'el-input',
 }
 
+// 设置在 attrs 的属性
+const ELE_TAG_ATTRS = {
+  input: ['placeholder'],
+}
+
 export default {
   props: {
     type: {
@@ -49,13 +54,24 @@ export default {
       }
       return onEvent
     },
-    // 处理 props
+
+    // 处理 props 与 attrs
     handleProps() {
       const props = {
         value: this.value,
       }
+      const attrs = {}
       if (hasOwnProperty(this.field, 'props')) {
         const objProps = _.cloneDeep(this.field.props)
+        // 寻找设置在 attrs 的属性
+        if (hasOwnProperty(ELE_TAG_ATTRS, this.type)) {
+          ELE_TAG_ATTRS[this.type].forEach((attr) => {
+            if (hasOwnProperty(objProps, attr)) {
+              attrs[attr] = objProps[attr]
+              delete objProps[attr]
+            }
+          })
+        }
         // 全局设置组件 size
         if (SUPPORT_SIZE.includes(this.type)) {
           props.size = this.size
@@ -66,7 +82,7 @@ export default {
         }
         Object.assign(props, objProps)
       }
-      return props
+      return { props, attrs }
     },
 
     // 处理插槽
@@ -90,10 +106,10 @@ export default {
       return h(
         ELE_TAG_MAPPING[this.type],
         {
-          props,
+          ...props,
           on: onEvent,
         },
-        slots
+        [...slots]
       )
     }
     const tag = TAG_MAPPING[this.type]

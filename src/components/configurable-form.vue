@@ -1,13 +1,7 @@
 <script>
 import './fields'
 import RenderFiled from './render-filed'
-import {
-  isFunction,
-  isNullOrUndefined,
-  isObject,
-  isArray,
-  hasOwnProperty,
-} from '@/utils'
+import { isObject, isArray, hasOwnProperty } from '@/utils'
 import { SUPPORT_EVENT } from '@/constants'
 
 const FIELD_DEFAULT_VAL = {
@@ -71,12 +65,9 @@ export default {
         if (hasOwnProperty(field, 'default')) {
           val = field.default
         } else {
-          const defaultVal = FIELD_DEFAULT_VAL[field.type]
-          val = isNullOrUndefined(defaultVal)
-            ? undefined
-            : isFunction(defaultVal)
-            ? defaultVal()
-            : defaultVal
+          val = hasOwnProperty(FIELD_DEFAULT_VAL, field.type)
+            ? FIELD_DEFAULT_VAL[field.type]
+            : undefined
         }
         formData[field.prop] = val
         defaultData[field.prop] = val

@@ -23,7 +23,9 @@ export default {
           label: 'input',
           props: {
             clearable: true,
+            placeholder: 'test',
           },
+          default: '222',
           slots: [
             {
               slotName: 'append',
