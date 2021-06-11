@@ -1,10 +1,9 @@
 <script>
 import _ from 'lodash'
-import { hasOwnProperty, isArray } from '@/utils'
+import { hasOwnProperty, isArray, isNullOrUndefined, isFunction } from '@/utils'
 import { SUPPORT_EVENT, SUPPORT_SIZE } from '@/constants'
 
 const TAG_MAPPING = {
-  radio: 'c-radio',
   select: 'c-select',
   checkbox: 'c-checkbox',
   inputNumber: 'c-input-number',
@@ -14,13 +13,26 @@ const TAG_MAPPING = {
   dateTimePicker: 'c-date-time-picker',
 }
 
+// 映射成 el 标识
 const ELE_TAG_MAPPING = {
   input: 'el-input',
+  radio: 'el-radio-group',
 }
 
 // 设置在 attrs 的属性
 const ELE_TAG_ATTRS = {
   input: ['placeholder'],
+}
+
+const ELE_CHILD_TAG = {
+  radio: (type) => {
+    if (isNullOrUndefined(type) || type === 'radio') {
+      return 'el-radio'
+    } else if (type === 'radio-button') {
+      return 'el-radio-button'
+    }
+    return undefined
+  },
 }
 
 export default {
@@ -72,15 +84,15 @@ export default {
             }
           })
         }
-        // 全局设置组件 size
-        if (SUPPORT_SIZE.includes(this.type)) {
-          props.size = this.size
-        }
         // 防止与双向绑定的值冲突，双向绑定失效
         if (hasOwnProperty(objProps, 'value')) {
           delete objProps.value
         }
         Object.assign(props, objProps)
+      }
+      // 全局设置组件 size
+      if (SUPPORT_SIZE.includes(this.type)) {
+        props.size = this.size
       }
       return { props, attrs }
     },
@@ -96,6 +108,48 @@ export default {
       }
       return slots
     },
+
+    // 处理子节点
+    handleChildren(h) {
+      const children = []
+      if (hasOwnProperty(ELE_CHILD_TAG, this.type)) {
+        const { childType, options } = this.field
+        const childTag = ELE_CHILD_TAG[this.type]
+        const tag = isFunction(childTag) ? childTag(childType) : childTag
+        if (isNullOrUndefined(tag)) return []
+        Array.isArray(options) &&
+          options.forEach((option) => {
+            const props = option.props || {}
+            children.push(
+              this.createElement(
+                h,
+                tag,
+                {},
+                {
+                  props: {
+                    label: option.value,
+                    ...props,
+                  },
+                  key: option.value,
+                },
+                [option.label]
+              )
+            )
+          })
+      }
+      return children
+    },
+
+    createElement(h, tag, on, props, children) {
+      return h(
+        tag,
+        {
+          ...props,
+          on,
+        },
+        [...children]
+      )
+    },
   },
 
   render: function (h) {
@@ -103,14 +157,11 @@ export default {
       const onEvent = this.handleEvent()
       const props = this.handleProps()
       const slots = this.handleSlots(h)
-      return h(
-        ELE_TAG_MAPPING[this.type],
-        {
-          ...props,
-          on: onEvent,
-        },
-        [...slots]
-      )
+      const children = this.handleChildren(h)
+      return this.createElement(h, ELE_TAG_MAPPING[this.type], onEvent, props, [
+        ...slots,
+        ...children,
+      ])
     }
     const tag = TAG_MAPPING[this.type]
     if (tag) {

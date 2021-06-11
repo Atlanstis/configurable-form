@@ -81,7 +81,7 @@ export default {
     return (
       <el-form labelWidth={this.labelWidth}>
         {this.fields.map((field) => {
-          const { type, on } = field
+          const { type, on, prop } = field
           // 注册监听事件
           const onEvent = {}
           if (isObject(on) && isArray(SUPPORT_EVENT[type])) {
@@ -100,7 +100,7 @@ export default {
           }
           const fieldEl = (
             <render-filed
-              v-model={this.formData[type]}
+              v-model={this.formData[prop]}
               props={props}
               on={onEvent}
             ></render-filed>

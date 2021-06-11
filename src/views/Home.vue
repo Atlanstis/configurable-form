@@ -17,49 +17,78 @@ export default {
   data() {
     return {
       fields: [
-        {
-          type: 'input',
-          prop: 'input',
-          label: 'input',
-          props: {
-            clearable: true,
-            placeholder: 'test',
-          },
-          default: '222',
-          slots: [
-            {
-              slotName: 'append',
-              formatter: () => {
-                return <el-button icon="el-icon-search"></el-button>
-              },
-            },
-          ],
-          on: {
-            change: (value) => {
-              console.log('change', value)
-            },
-            blur: (value) => {
-              console.log('blur', value)
-            },
-            focus: (value) => {
-              console.log('focus', value)
-            },
-            input: (value) => {
-              console.log('input', value)
-            },
-            clear: (value) => {
-              console.log('clear', value)
-            },
-          },
-        },
+        // {
+        //   type: 'input',
+        //   prop: 'input',
+        //   label: 'input',
+        //   props: {
+        //     clearable: true,
+        //     placeholder: 'test',
+        //   },
+        //   default: '222',
+        //   slots: [
+        //     {
+        //       slotName: 'append',
+        //       formatter: () => {
+        //         return <el-button icon="el-icon-search"></el-button>
+        //       },
+        //     },
+        //   ],
+        //   on: {
+        //     change: (value) => {
+        //       console.log('change', value)
+        //     },
+        //     blur: (value) => {
+        //       console.log('blur', value)
+        //     },
+        //     focus: (value) => {
+        //       console.log('focus', value)
+        //     },
+        //     input: (value) => {
+        //       console.log('input', value)
+        //     },
+        //     clear: (value) => {
+        //       console.log('clear', value)
+        //     },
+        //   },
+        // },
         {
           type: 'radio',
           prop: 'radio',
           label: 'radio',
+          default: '1',
           options: [
             {
               label: 'radio 1',
               value: '1',
+              props: {
+                border: true,
+              },
+            },
+            {
+              label: 'radio 2',
+              value: '2',
+            },
+          ],
+          on: {
+            // input: (value) => {
+            //   console.log('input', value)
+            // },
+          },
+        },
+        {
+          type: 'radio',
+          prop: 'radio2',
+          label: 'radio2',
+          childType: 'radio-button',
+          default: '2',
+          options: [
+            {
+              label: 'radio 1',
+              value: '1',
+              props: {
+                disabled: true,
+              },
             },
             {
               label: 'radio 2',
