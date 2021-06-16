@@ -17,6 +17,7 @@ const TAG_MAPPING = {
 const ELE_TAG_MAPPING = {
   input: 'el-input',
   radio: 'el-radio-group',
+  checkbox: 'el-checkbox-group',
 }
 
 // 设置在 attrs 的属性
@@ -30,6 +31,14 @@ const ELE_CHILD_TAG = {
       return 'el-radio'
     } else if (type === 'radio-button') {
       return 'el-radio-button'
+    }
+    return undefined
+  },
+  checkbox: (type) => {
+    if (isNullOrUndefined(type) || type === 'checkbox') {
+      return 'el-checkbox'
+    } else if (type === 'checkbox-button') {
+      return 'el-checkbox-button'
     }
     return undefined
   },

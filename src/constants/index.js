@@ -1,6 +1,7 @@
 export const SUPPORT_EVENT = {
   input: ['input', 'blur', 'focus', 'change', 'clear'],
-  radio: ['input'],
+  radio: ['input', 'change'],
+  checkbox: ['input', 'change'],
 }
 
-export const SUPPORT_SIZE = ['input', 'radio']
+export const SUPPORT_SIZE = ['input', 'radio', 'checkbox']

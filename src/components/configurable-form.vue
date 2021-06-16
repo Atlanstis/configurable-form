@@ -8,7 +8,7 @@ const FIELD_DEFAULT_VAL = {
   input: '',
   radio: '',
   select: '',
-  checkbox: '',
+  checkbox: [],
   inputNumber: '',
   switch: '',
   timePicker: '',
