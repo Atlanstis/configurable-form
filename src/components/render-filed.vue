@@ -18,6 +18,7 @@ const ELE_TAG_MAPPING = {
   input: 'el-input',
   radio: 'el-radio-group',
   checkbox: 'el-checkbox-group',
+  inputNumber: 'el-input-number',
 }
 
 // 设置在 attrs 的属性

@@ -126,6 +126,22 @@ export default {
           type: 'inputNumber',
           prop: 'inputNumber',
           label: 'inputNumber',
+          props: {
+            precision: 2,
+            min: 0,
+            max: 10,
+          },
+          on: {
+            change: (val) => {
+              console.log('change', val)
+            },
+            blur: (value) => {
+              console.log('blur', value)
+            },
+            focus: (value) => {
+              console.log('focus', value)
+            },
+          },
         },
         {
           type: 'select',
