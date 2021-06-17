@@ -2,18 +2,18 @@
 import './fields'
 import RenderFiled from './render-filed'
 import { isObject, isArray, hasOwnProperty } from '@/utils'
-import { SUPPORT_EVENT } from '@/constants'
+import { SUPPORT_EVENT, TAG_TYPE } from '@/constants'
 
 const FIELD_DEFAULT_VAL = {
-  input: '',
-  radio: '',
-  select: '',
-  checkbox: [],
-  inputNumber: 0,
-  switch: '',
-  timePicker: '',
-  datePicker: '',
-  dateTimePicker: '',
+  [TAG_TYPE.INPUT]: '',
+  [TAG_TYPE.RADIO]: '',
+  [TAG_TYPE.SELECT]: '',
+  [TAG_TYPE.CHECKBOX]: [],
+  [TAG_TYPE.INPUT_NUMBER]: 0,
+  [TAG_TYPE.SWITCH]: '',
+  [TAG_TYPE.TIME_PICKER]: '',
+  [TAG_TYPE.DATE_PICKER]: '',
+  [TAG_TYPE.DATE_TIME_PICKER]: '',
 }
 
 export default {

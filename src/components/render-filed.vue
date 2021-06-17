@@ -1,29 +1,20 @@
 <script>
 import _ from 'lodash'
 import { hasOwnProperty, isArray, isNullOrUndefined, isFunction } from '@/utils'
-import { SUPPORT_EVENT, SUPPORT_SIZE } from '@/constants'
-
-const TAG_MAPPING = {
-  select: 'c-select',
-  checkbox: 'c-checkbox',
-  inputNumber: 'c-input-number',
-  switch: 'c-switch',
-  timePicker: 'c-time-picker',
-  datePicker: 'c-date-picker',
-  dateTimePicker: 'c-date-time-picker',
-}
+import { SUPPORT_EVENT, SUPPORT_SIZE, TAG_TYPE } from '@/constants'
 
 // 映射成 el 标识
 const ELE_TAG_MAPPING = {
-  input: 'el-input',
-  radio: 'el-radio-group',
-  checkbox: 'el-checkbox-group',
-  inputNumber: 'el-input-number',
+  [TAG_TYPE.INPUT]: 'el-input',
+  [TAG_TYPE.RADIO]: 'el-radio-group',
+  [TAG_TYPE.CHECKBOX]: 'el-checkbox-group',
+  [TAG_TYPE.INPUT_NUMBER]: 'el-input-number',
+  [TAG_TYPE.SELECT]: 'el-select',
 }
 
 // 设置在 attrs 的属性
 const ELE_TAG_ATTRS = {
-  input: ['placeholder'],
+  [TAG_TYPE.INPUT]: ['placeholder'],
 }
 
 const ELE_CHILD_TAG = {
@@ -43,6 +34,7 @@ const ELE_CHILD_TAG = {
     }
     return undefined
   },
+  select: 'el-option',
 }
 
 export default {
@@ -127,30 +119,53 @@ export default {
         const childTag = ELE_CHILD_TAG[this.type]
         const tag = isFunction(childTag) ? childTag(childType) : childTag
         if (isNullOrUndefined(tag)) return []
-        Array.isArray(options) &&
-          options.forEach((option) => {
-            const props = option.props || {}
-            children.push(
-              this.createElement(
-                h,
-                tag,
-                {},
-                {
-                  props: {
-                    label: option.value,
-                    ...props,
+        if (['radio', 'checkbox'].includes(this.type)) {
+          Array.isArray(options) &&
+            options.forEach((option) => {
+              const props = option.props || {}
+              children.push(
+                this.createElement(
+                  h,
+                  tag,
+                  {},
+                  {
+                    props: {
+                      label: option.value,
+                      ...props,
+                    },
+                    key: option.value,
                   },
-                  key: option.value,
-                },
-                [option.label]
+                  [option.label]
+                )
               )
-            )
-          })
+            })
+        } else if (this.type === 'select') {
+          Array.isArray(options) &&
+            options.forEach((option) => {
+              const props = option.props || {}
+              children.push(
+                this.createElement(
+                  h,
+                  tag,
+                  {},
+                  {
+                    props: {
+                      label: option.label,
+                      value: option.value,
+                      ...props,
+                    },
+                    key: option.value,
+                  },
+                  []
+                )
+              )
+            })
+        }
       }
       return children
     },
 
-    createElement(h, tag, on, props, children) {
+    createElement(h, tag, on, props, children = []) {
       return h(
         tag,
         {
@@ -172,14 +187,6 @@ export default {
         ...slots,
         ...children,
       ])
-    }
-    const tag = TAG_MAPPING[this.type]
-    if (tag) {
-      return h(tag, {
-        props: {
-          field: this.field,
-        },
-      })
     }
     return h('div')
   },
