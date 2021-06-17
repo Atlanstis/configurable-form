@@ -16,6 +16,7 @@ export const SUPPORT_EVENT = {
   [TAG_TYPE.CHECKBOX]: ['input', 'change'],
   [TAG_TYPE.INPUT_NUMBER]: ['input', 'blur', 'focus', 'change'],
   [TAG_TYPE.SELECT]: ['input'],
+  [TAG_TYPE.SWITCH]: ['input', 'change'],
 }
 
 export const SUPPORT_SIZE = [

@@ -10,6 +10,7 @@ const ELE_TAG_MAPPING = {
   [TAG_TYPE.CHECKBOX]: 'el-checkbox-group',
   [TAG_TYPE.INPUT_NUMBER]: 'el-input-number',
   [TAG_TYPE.SELECT]: 'el-select',
+  [TAG_TYPE.SWITCH]: 'el-switch',
 }
 
 // 设置在 attrs 的属性

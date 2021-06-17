@@ -162,6 +162,18 @@ export default {
           type: 'switch',
           prop: 'switch',
           label: 'switch',
+          default: '0',
+          props: {
+            'active-value': '1',
+            'inactive-value': '0',
+            'active-text': '按月付费',
+            'inactive-text': '按年付费',
+          },
+          on: {
+            change: (val) => {
+              console.log('change', val)
+            },
+          },
         },
         {
           type: 'timePicker',
